@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <com.ysered.hatonhead.view.FaceView
+        android:id="@+id/faceView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:src="@drawable/face_demo"
+        android:src="@drawable/face_demo1"
+        app:hat_image_resource="@drawable/hat"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
