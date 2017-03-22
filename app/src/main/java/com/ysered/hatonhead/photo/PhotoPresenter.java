@@ -10,12 +10,12 @@ public class PhotoPresenter implements PhotoContract.Presenter {
     }
 
     @Override
-    public void resume() {
+    public void bind() {
 
     }
 
     @Override
-    public void destroy() {
+    public void unbind() {
         view = null;
     }
 }

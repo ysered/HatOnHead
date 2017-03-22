@@ -11,14 +11,12 @@ public interface BasePresenter<T> {
     void setView(T view);
 
     /**
-     * Method that control the lifecycle of the view. It should be called in the view's
-     * (Activity or Fragment) onResume() method.
+     * Should be called in the view's (Activity or Fragment) onResume() method.
      */
-    void resume();
+    void bind();
 
     /**
-     * Method that control the lifecycle of the view. It should be called in the view's
-     * (Activity or Fragment) onDestroy() method.
+     * Should be called in the view's (Activity or Fragment) onDestroy() method.
      */
-    void destroy();
+    void unbind();
 }
