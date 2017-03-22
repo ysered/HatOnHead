@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_round_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PhotoActivity">
+        <activity android:name=".photo.PhotoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
