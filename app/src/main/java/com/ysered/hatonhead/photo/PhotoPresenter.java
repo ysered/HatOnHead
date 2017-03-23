@@ -45,7 +45,7 @@ class PhotoPresenter implements PhotoContract.Presenter {
 
     @Override
     public void onHideFaceAnnotations() {
-        view.hideHats();
+        view.hideFaceAnnotations();
     }
 
     @Override
