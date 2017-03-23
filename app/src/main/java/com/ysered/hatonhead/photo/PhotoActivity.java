@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.google.android.gms.vision.Frame;
@@ -15,7 +16,7 @@ import com.google.android.gms.vision.face.FaceDetector;
 import com.ysered.hatonhead.R;
 import com.ysered.hatonhead.view.FaceView;
 
-public class PhotoActivity extends AppCompatActivity implements PhotoContract.View, View.OnClickListener {
+public class PhotoActivity extends AppCompatActivity implements PhotoContract.View, CheckBox.OnCheckedChangeListener {
     private static final String TAG = PhotoActivity.class.getSimpleName();
 
     private FaceView faceView;
@@ -26,8 +27,8 @@ public class PhotoActivity extends AppCompatActivity implements PhotoContract.Vi
         setContentView(R.layout.activity_photo);
 
         faceView = (FaceView) findViewById(R.id.faceView);
-        findViewById(R.id.showAnnotationsButton).setOnClickListener(this);
-        findViewById(R.id.showHatButton).setOnClickListener(this);
+        ((CheckBox) findViewById(R.id.showAnnotationsCheckBox)).setOnCheckedChangeListener(this);
+        ((CheckBox) findViewById(R.id.showHatButton)).setOnCheckedChangeListener(this);
 
         final FaceDetector faceDetector = new FaceDetector.Builder(getApplicationContext())
                 .setTrackingEnabled(false)
@@ -53,13 +54,21 @@ public class PhotoActivity extends AppCompatActivity implements PhotoContract.Vi
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.showAnnotationsButton:
-                presenter.onShowFaceAnnotations(faceView.getBitmap());
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.showAnnotationsCheckBox:
+                if (isChecked) {
+                    presenter.onShowFaceAnnotations(faceView.getBitmap());
+                } else {
+                    presenter.onHideFaceAnnotations();
+                }
                 break;
             case R.id.showHatButton:
-                presenter.onShowHat(faceView.getBitmap());
+                if (isChecked) {
+                    presenter.onShowHat(faceView.getBitmap());
+                } else {
+                    presenter.onHideHat();
+                }
                 break;
         }
     }
