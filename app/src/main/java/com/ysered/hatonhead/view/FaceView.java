@@ -11,10 +11,10 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
-import android.view.View;
 
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.Landmark;
@@ -24,7 +24,8 @@ import com.ysered.hatonhead.R;
  * View which displays a bitmap containing a face along with overlay graphics that identify the
  * locations of detected facial landmarks.
  */
-public class FaceView extends View {
+public class FaceView extends android.support.v7.widget.AppCompatImageView {
+    private static final String TAG = FaceView.class.getSimpleName();
 
     private Bitmap hatBitmap;
     private Bitmap bitmap;
@@ -41,11 +42,17 @@ public class FaceView extends View {
         init(attrs);
     }
 
-    /**
-     * Sets the bitmap background and the associated face detections.
-     */
-    public void setContent(Bitmap bitmap, SparseArray<Face> faces, boolean isShowAnnotations) {
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    @Override
+    public void setImageBitmap(Bitmap bitmap) {
+        super.setImageBitmap(bitmap);
         this.bitmap = bitmap;
+    }
+
+    public void showFaces(SparseArray<Face> faces, boolean isShowAnnotations) {
         this.faces = faces;
         this.isShowAnnotations = isShowAnnotations;
         invalidate();
@@ -70,6 +77,8 @@ public class FaceView extends View {
         final int hatImageRes = array.getResourceId(R.styleable.FaceView_hat_image_resource, R.drawable.hat);
         hatBitmap = BitmapFactory.decodeResource(getContext().getResources(), hatImageRes);
         array.recycle();
+        final BitmapDrawable drawable = (BitmapDrawable) getDrawable();
+        bitmap = (drawable != null) ? drawable.getBitmap() : null;
     }
 
     /**
@@ -122,11 +131,11 @@ public class FaceView extends View {
                 canvas.drawCircle(cx, cy, 10, circlePaint);
                 canvas.drawRect(faceX1, faceY1, faceX2, faceY2, rectPaint);
 
-                final Bitmap scaledHat = createScaledBitmapByWidth(hatBitmap, face.getWidth());
+                /*final Bitmap scaledHat = createScaledBitmapByWidth(hatBitmap, face.getWidth());
                 if (landmark.getType() == Landmark.RIGHT_EYE) {
-                    final int hatY = (int) ((landmark.getPosition().y - scaledHat.getHeight()) * scale);
+                    final int hatY = (int) (landmark.getPosition().y - scaledHat.getHeight());
                     drawBitmap(canvas, scaledHat, faceX1, hatY, (int) face.getEulerZ());
-                }
+                }*/
             }
         }
     }
@@ -138,7 +147,6 @@ public class FaceView extends View {
     }
 
     private void drawBitmap(Canvas canvas, Bitmap bitmap, int x, int y, int angle) {
-
         final Matrix hatMatrix = new Matrix();
         hatMatrix.postRotate(-angle);
         hatMatrix.postTranslate(x, y);
