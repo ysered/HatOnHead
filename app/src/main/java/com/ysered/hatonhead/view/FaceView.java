@@ -31,6 +31,7 @@ public class FaceView extends android.support.v7.widget.AppCompatImageView {
     private Bitmap bitmap;
     private SparseArray<Face> faces;
     private boolean isShowAnnotations = false;
+    private boolean isShowHat = false;
 
     public FaceView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -52,9 +53,25 @@ public class FaceView extends android.support.v7.widget.AppCompatImageView {
         this.bitmap = bitmap;
     }
 
-    public void showFaces(SparseArray<Face> faces, boolean isShowAnnotations) {
+    public void showFaceAnnotations(SparseArray<Face> faces) {
         this.faces = faces;
-        this.isShowAnnotations = isShowAnnotations;
+        this.isShowAnnotations = true;
+        invalidate();
+    }
+
+    public void hideFaceAnnotations() {
+        this.isShowAnnotations = false;
+        invalidate();
+    }
+
+    public void showHats(SparseArray<Face> faces) {
+        this.faces = faces;
+        this.isShowHat = true;
+        invalidate();
+    }
+
+    public void hideHats() {
+        this.isShowHat = false;
         invalidate();
     }
 
@@ -68,6 +85,9 @@ public class FaceView extends android.support.v7.widget.AppCompatImageView {
             double scale = drawBitmap(canvas);
             if (isShowAnnotations) {
                 drawFaceAnnotations(canvas, scale);
+            }
+            if (isShowHat) {
+                drawHat(canvas, scale);
             }
         }
     }
@@ -97,14 +117,6 @@ public class FaceView extends android.support.v7.widget.AppCompatImageView {
         return scale;
     }
 
-    /**
-     * Draws a small circle for each detected landmark, centered at the detected landmark position.
-     * <p>
-     * <p>
-     * Note that eye landmarks are defined to be the midpoint between the detected eye corner
-     * positions, which tends to place the eye landmarks at the lower eyelid rather than at the
-     * pupil position.
-     */
     private void drawFaceAnnotations(Canvas canvas, double scale) {
         final Paint circlePaint = new Paint();
         circlePaint.setColor(Color.GREEN);
@@ -130,12 +142,21 @@ public class FaceView extends android.support.v7.widget.AppCompatImageView {
                 final int cy = (int) (landmark.getPosition().y * scale);
                 canvas.drawCircle(cx, cy, 10, circlePaint);
                 canvas.drawRect(faceX1, faceY1, faceX2, faceY2, rectPaint);
+            }
+        }
+    }
 
-                /*final Bitmap scaledHat = createScaledBitmapByWidth(hatBitmap, face.getWidth());
+    private void drawHat(Canvas canvas, double scale) {
+        // assume that only one face on the photo
+        if (faces.size() > 0) {
+            final Face face = faces.valueAt(0);
+            final int faceX1 = (int) (face.getPosition().x * scale);
+            for (Landmark landmark : face.getLandmarks()) {
+                final Bitmap scaledHat = createScaledBitmapByWidth(hatBitmap, face.getWidth());
                 if (landmark.getType() == Landmark.RIGHT_EYE) {
                     final int hatY = (int) (landmark.getPosition().y - scaledHat.getHeight());
                     drawBitmap(canvas, scaledHat, faceX1, hatY, (int) face.getEulerZ());
-                }*/
+                }
             }
         }
     }

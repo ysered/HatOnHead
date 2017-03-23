@@ -15,12 +15,24 @@ interface PhotoContract {
     interface Presenter extends BasePresenter<View> {
 
         void onShowFaceAnnotations(Bitmap bitmap);
+
+        void onHideFaceAnnotations();
+
+        void onShowHat(Bitmap bitmap);
+
+        void onHideHat();
     }
 
     interface View extends BaseView {
 
         void showLowStorageError();
 
-        void showFaces(SparseArray<Face> faces);
+        void showFaceAnnotations(SparseArray<Face> faces);
+
+        void hideFaceAnnotations();
+
+        void showHats(SparseArray<Face> faces);
+
+        void hideHats();
     }
 }

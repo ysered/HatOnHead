@@ -37,9 +37,29 @@ class PhotoPresenter implements PhotoContract.Presenter {
     public void onShowFaceAnnotations(Bitmap bitmap) {
         if (faceDetector.isOperational()) {
             final Frame frame = frameBuilder.setBitmap(bitmap).build();
-            view.showFaces(faceDetector.detect(frame));
+            view.showFaceAnnotations(faceDetector.detect(frame));
         } else {
             view.showLowStorageError();
         }
+    }
+
+    @Override
+    public void onHideFaceAnnotations() {
+        view.hideHats();
+    }
+
+    @Override
+    public void onShowHat(Bitmap bitmap) {
+        if (faceDetector.isOperational()) {
+            final Frame frame = frameBuilder.setBitmap(bitmap).build();
+            view.showHats(faceDetector.detect(frame));
+        } else {
+            view.showLowStorageError();
+        }
+    }
+
+    @Override
+    public void onHideHat() {
+        view.hideHats();
     }
 }

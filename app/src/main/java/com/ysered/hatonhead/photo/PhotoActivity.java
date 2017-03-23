@@ -27,6 +27,7 @@ public class PhotoActivity extends AppCompatActivity implements PhotoContract.Vi
 
         faceView = (FaceView) findViewById(R.id.faceView);
         findViewById(R.id.showAnnotationsButton).setOnClickListener(this);
+        findViewById(R.id.showHatButton).setOnClickListener(this);
 
         final FaceDetector faceDetector = new FaceDetector.Builder(getApplicationContext())
                 .setTrackingEnabled(false)
@@ -57,6 +58,9 @@ public class PhotoActivity extends AppCompatActivity implements PhotoContract.Vi
             case R.id.showAnnotationsButton:
                 presenter.onShowFaceAnnotations(faceView.getBitmap());
                 break;
+            case R.id.showHatButton:
+                presenter.onShowHat(faceView.getBitmap());
+                break;
         }
     }
 
@@ -82,7 +86,22 @@ public class PhotoActivity extends AppCompatActivity implements PhotoContract.Vi
     }
 
     @Override
-    public void showFaces(SparseArray<Face> faces) {
-        faceView.showFaces(faces, true);
+    public void showFaceAnnotations(SparseArray<Face> faces) {
+        faceView.showFaceAnnotations(faces);
+    }
+
+    @Override
+    public void hideFaceAnnotations() {
+        faceView.hideFaceAnnotations();
+    }
+
+    @Override
+    public void showHats(SparseArray<Face> faces) {
+        faceView.showHats(faces);
+    }
+
+    @Override
+    public void hideHats() {
+        faceView.hideHats();
     }
 }
