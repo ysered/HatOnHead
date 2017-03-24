@@ -25,6 +25,7 @@ ext {
     visionApiVersion = '10.2.0'
     junitVersion = '4.12'
     espressoVersion = '2.2.2'
+    daggerVersion = '2.9'
 }
 
 dependencies {
@@ -36,6 +37,11 @@ dependencies {
 
     // Google Vision API
     compile "com.google.android.gms:play-services-vision:$visionApiVersion"
+
+    // Dagger 2
+    compile "com.google.dagger:dagger:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    provided 'javax.annotation:jsr250-api:1.0'
 
     // test libraries
     testCompile "junit:junit:$junitVersion"
