@@ -134,14 +134,14 @@ public class FaceView extends android.support.v7.widget.AppCompatImageView {
             final Face face = faces.valueAt(0);
             final int faceX1 = (int) (face.getPosition().x * scale);
             final int faceY1 = (int) (face.getPosition().y * scale);
-            final int faceX2 = (int) (faceX1 + face.getWidth());
-            final int faceY2 = (int) (faceY1 + face.getHeight());
+            final int faceX2 = (int) (faceX1 + face.getWidth() * scale);
+            final int faceY2 = (int) (faceY1 + face.getHeight() * scale);
+            canvas.drawRect(faceX1, faceY1, faceX2, faceY2, rectPaint);
 
             for (Landmark landmark : face.getLandmarks()) {
                 final int cx = (int) (landmark.getPosition().x * scale);
                 final int cy = (int) (landmark.getPosition().y * scale);
                 canvas.drawCircle(cx, cy, 10, circlePaint);
-                canvas.drawRect(faceX1, faceY1, faceX2, faceY2, rectPaint);
             }
         }
     }
