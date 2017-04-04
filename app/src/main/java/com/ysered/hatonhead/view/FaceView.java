@@ -14,6 +14,7 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.google.android.gms.vision.face.Face;
@@ -136,6 +137,8 @@ public class FaceView extends android.support.v7.widget.AppCompatImageView {
             final int faceY1 = (int) (face.getPosition().y * scale);
             final int faceX2 = (int) (faceX1 + face.getWidth() * scale);
             final int faceY2 = (int) (faceY1 + face.getHeight() * scale);
+
+            Log.d(TAG, String.format("draw rect(x1 = %s, y1 = %s, x2 = %s, y2 = %s)", faceX1, faceY1, faceX2, faceY2));
             canvas.drawRect(faceX1, faceY1, faceX2, faceY2, rectPaint);
 
             for (Landmark landmark : face.getLandmarks()) {
@@ -152,9 +155,9 @@ public class FaceView extends android.support.v7.widget.AppCompatImageView {
             final Face face = faces.valueAt(0);
             final int faceX1 = (int) (face.getPosition().x * scale);
             for (Landmark landmark : face.getLandmarks()) {
-                final Bitmap scaledHat = createScaledBitmapByWidth(hatBitmap, face.getWidth());
+                final Bitmap scaledHat = createScaledBitmapByWidth(hatBitmap, (float) (face.getWidth() * scale));
                 if (landmark.getType() == Landmark.RIGHT_EYE) {
-                    final int hatY = (int) (landmark.getPosition().y - scaledHat.getHeight());
+                    final int hatY = (int) (landmark.getPosition().y * scale - scaledHat.getHeight());
                     drawBitmap(canvas, scaledHat, faceX1, hatY, (int) face.getEulerZ());
                 }
             }
